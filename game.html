@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>카드 맞히기 게임</title>
+<style>
+  body { font-family: sans-serif; text-align: center; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(10, 80px);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .card {
+    width: 80px;
+    height: 80px;
+    background: gray;
+    cursor: pointer;
+  }
+  .card img {
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  .card.open img {
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<h2>카드 맞히기 게임</h2>
+<div class="grid" id="game"></div>
+
+<script>
+const game = document.getElementById("game");
+
+// ✅ 22개 이미지 + 3개 추가
+let images = [];
+for (let i = 1; i <= 22; i++) {
+  images.push("img/" + i + ".jpg");
+}
+
+// 3개 추가
+for (let i = 19; i <22; i++) {
+  images.push(images[i]);
+}
+
+// 쌍 만들기 (2배)
+let cards = [...images, ...images];
+
+// 섞기
+cards.sort(() => 0.5 - Math.random());
+
+let first = null;
+let second = null;
+let lock = false;
+
+// 카드 생성
+cards.forEach((src, index) => {
+  const card = document.createElement("div");
+  card.classList.add("card");
+
+  const img = document.createElement("img");
+  img.src = src;
+
+  card.appendChild(img);
+
+  card.addEventListener("click", () => {
+    if (lock || card.classList.contains("open")) return;
+
+    card.classList.add("open");
+
+    if (!first) {
+      first = card;
+    } else {
+      second = card;
+      lock = true;
+
+      const img1 = first.querySelector("img").src;
+      const img2 = second.querySelector("img").src;
+
+      if (img1 === img2) {
+        first = null;
+        second = null;
+        lock = false;
+      } else {
+        setTimeout(() => {
+          first.classList.remove("open");
+          second.classList.remove("open");
+          first = null;
+          second = null;
+          lock = false;
+        }, 1000);
+      }
+    }
+  });
+
+  game.appendChild(card);
+});
+</script>
+
+</body>
+</html>
