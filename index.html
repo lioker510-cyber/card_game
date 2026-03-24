@@ -35,7 +35,7 @@
     display: block;
   }
 
-  /* 좌표 표시 */
+  /* 숫자 표시 */
   .coord {
     position: absolute;
     top: 5px;
@@ -80,18 +80,12 @@ cards.forEach((src, index) => {
   const img = document.createElement("img");
   img.src = src;
 
-  // ✅ 좌표 계산
-  const cols = 10;
-  const row = Math.floor(index / cols) + 1;
-  const col = index % cols;
-  const letter = String.fromCharCode(65 + col); // A~J
+  // ✅ 숫자 표시 (1부터 시작)
+  const number = document.createElement("div");
+  number.classList.add("coord");
+  number.innerText = index + 1;
 
-  // ✅ 좌표 표시
-  const coord = document.createElement("div");
-  coord.classList.add("coord");
-  coord.innerText = letter + row;
-
-  card.appendChild(coord);
+  card.appendChild(number);
   card.appendChild(img);
 
   card.addEventListener("click", () => {
